@@ -9824,6 +9824,8 @@ declare module 'vscode' {
 		 */
 		export function createTextEditorDecorationType(options: DecorationRenderOptions): TextEditorDecorationType;
 
+		export function request(options: any, token: CancellationToken): Thenable<any>;
+
 		/**
 		 * Show an information message to users. Optionally provide an array of items which will be presented as
 		 * clickable buttons.

@@ -74,6 +74,7 @@ import { ITextQueryBuilderOptions } from 'vs/workbench/services/search/common/qu
 import * as search from 'vs/workbench/services/search/common/search';
 import { ISaveProfileResult } from 'vs/workbench/services/userDataProfile/common/userDataProfile';
 import { TerminalCommandMatchResult, TerminalQuickFixCommand, TerminalQuickFixOpener } from 'vscode';
+import { IRequestContextBuffer, IRequestOptions } from 'vs/base/parts/request/common/request';
 
 export type TerminalQuickFix = TerminalQuickFixCommand | TerminalQuickFixOpener;
 
@@ -445,6 +446,7 @@ export interface MainThreadMessageOptions {
 
 export interface MainThreadMessageServiceShape extends IDisposable {
 	$showMessage(severity: Severity, message: string, options: MainThreadMessageOptions, commands: { title: string; isCloseAffordance: boolean; handle: number }[]): Promise<number | undefined>;
+	$request(options: IRequestOptions, token: CancellationToken): Promise<IRequestContextBuffer>;
 }
 
 export interface MainThreadOutputServiceShape extends IDisposable {

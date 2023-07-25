@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { VSBufferReadableStream } from 'vs/base/common/buffer';
+import { VSBuffer, VSBufferReadableStream } from 'vs/base/common/buffer';
 
 const offlineName = 'Offline';
 
@@ -46,4 +46,13 @@ export interface IRequestContext {
 		statusCode?: number;
 	};
 	stream: VSBufferReadableStream;
+}
+
+export interface IRequestContextBuffer {
+	res: {
+		headers: IHeaders;
+		statusCode?: number;
+	};
+	buffer: VSBuffer;
+	text: string;
 }

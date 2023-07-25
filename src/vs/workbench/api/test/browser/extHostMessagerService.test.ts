@@ -86,7 +86,7 @@ suite('ExtHostMessageService', function () {
 		const service = new MainThreadMessageService(null!, new EmptyNotificationService(notification => {
 			assert.strictEqual(notification.actions!.primary!.length, 1);
 			queueMicrotask(() => notification.actions!.primary![0].run());
-		}), emptyCommandService, new TestDialogService());
+		}), emptyCommandService, new TestDialogService(), null!);
 
 		const handle = await service.$showMessage(1, 'h', {}, [{ handle: 42, title: 'a thing', isCloseAffordance: true }]);
 		assert.strictEqual(handle, 42);
@@ -102,7 +102,7 @@ suite('ExtHostMessageService', function () {
 					assert.strictEqual((cancelButton as IPromptButton<unknown>)!.label, 'Cancel');
 					return Promise.resolve({ result: buttons![0].run({ checkboxChecked: false }) });
 				}
-			} as IDialogService);
+			} as IDialogService, null!);
 
 			const handle = await service.$showMessage(1, 'h', { modal: true }, [{ handle: 42, title: 'a thing', isCloseAffordance: false }]);
 			assert.strictEqual(handle, 42);
@@ -113,7 +113,7 @@ suite('ExtHostMessageService', function () {
 				override prompt(prompt: IPrompt<any>) {
 					return Promise.resolve({ result: (prompt.cancelButton as IPromptButton<unknown>)!.run({ checkboxChecked: false }) });
 				}
-			} as IDialogService);
+			} as IDialogService, null!);
 
 			const handle = await service.$showMessage(1, 'h', { modal: true }, [{ handle: 42, title: 'a thing', isCloseAffordance: false }]);
 			assert.strictEqual(handle, undefined);
@@ -126,7 +126,7 @@ suite('ExtHostMessageService', function () {
 					assert.ok(cancelButton);
 					return Promise.resolve({ result: (cancelButton as IPromptButton<unknown>).run({ checkboxChecked: false }) });
 				}
-			} as IDialogService);
+			} as IDialogService, null!);
 
 			const handle = await service.$showMessage(1, 'h', { modal: true }, [{ handle: 42, title: 'a thing', isCloseAffordance: true }]);
 			assert.strictEqual(handle, 42);

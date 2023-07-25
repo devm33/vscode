@@ -12,6 +12,10 @@ import { IDialogService, IPromptButton } from 'vs/platform/dialogs/common/dialog
 import { INotificationService } from 'vs/platform/notification/common/notification';
 import { Event } from 'vs/base/common/event';
 import { ICommandService } from 'vs/platform/commands/common/commands';
+import { IRequestContextBuffer, IRequestOptions } from 'vs/base/parts/request/common/request';
+import { IRequestService } from 'vs/platform/request/common/request';
+import { CancellationToken } from 'vs/base/common/cancellation';
+import { streamToBuffer } from 'vs/base/common/buffer';
 
 @extHostNamedCustomer(MainContext.MainThreadMessageService)
 export class MainThreadMessageService implements MainThreadMessageServiceShape {
@@ -20,13 +24,20 @@ export class MainThreadMessageService implements MainThreadMessageServiceShape {
 		extHostContext: IExtHostContext,
 		@INotificationService private readonly _notificationService: INotificationService,
 		@ICommandService private readonly _commandService: ICommandService,
-		@IDialogService private readonly _dialogService: IDialogService
+		@IDialogService private readonly _dialogService: IDialogService,
+		@IRequestService private readonly _requestService: IRequestService
 	) {
 		//
 	}
 
 	dispose(): void {
 		//
+	}
+
+	async $request(options: IRequestOptions, token: CancellationToken): Promise<IRequestContextBuffer> {
+		const context = await this._requestService.request(options, token);
+		const buffer = await streamToBuffer(context.stream);
+		return { res: context.res, buffer, text: buffer.toString() };
 	}
 
 	$showMessage(severity: Severity, message: string, options: MainThreadMessageOptions, commands: { title: string; isCloseAffordance: boolean; handle: number }[]): Promise<number | undefined> {

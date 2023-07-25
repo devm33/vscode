@@ -9,6 +9,8 @@ import { MainContext, MainThreadMessageServiceShape, MainThreadMessageOptions, I
 import { IExtensionDescription } from 'vs/platform/extensions/common/extensions';
 import { ILogService } from 'vs/platform/log/common/log';
 import { checkProposedApiEnabled } from 'vs/workbench/services/extensions/common/extensions';
+import { IRequestContextBuffer, IRequestOptions } from 'vs/base/parts/request/common/request';
+import { CancellationToken } from 'vs/base/common/cancellation';
 
 function isMessageItem(item: any): item is vscode.MessageItem {
 	return item && item.title;
@@ -69,5 +71,9 @@ export class ExtHostMessageService {
 			}
 			return undefined;
 		});
+	}
+
+	request(options: IRequestOptions, token: CancellationToken): Promise<IRequestContextBuffer> {
+		return this._proxy.$request(options, token);
 	}
 }
